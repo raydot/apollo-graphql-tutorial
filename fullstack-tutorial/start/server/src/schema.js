@@ -39,9 +39,23 @@ const typeDefs = gql`
 
   # me = currently logged in user
   type Query {
-    launches: [Launch]!
+    # launches: [Launch]!
+    # pageSize = The number of results to show.  Must be >= 1.  Default = 20
+    # after = If you add a cursor it will only return results *after* this cursor
+    launches(pageSize: Int, after: String): LaunchConnection!
     launch(id: ID!): Launch
     me: User
+  }
+
+  """
+  (multi line comments!)
+  Simple wrapper around our list of launches that contains a cursor to the last item in the
+  list.  Pass this cursor to the launches query to fetch results after these.
+  """
+  type LaunchConnection {
+    cursor: String!
+    hasMore: Boolean!
+    launches: [Launch]!
   }
 
   # Mutations
